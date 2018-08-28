@@ -61,9 +61,11 @@ volatile uint8_t Reg = 0; //Used to point to which register to read out
 
 void setup() 
 {
+	//FIX! Set address, baud rate, based on EEPROM values 
 	Serial.begin(4800); //FIX! Auto baud rate detect?? Do not turn on UART until contacted over I2C? 
+	//FIX! Make baud rate user settable 
 	// Serial.println("TEST!"); //DEBUG!
-	Wire.begin(ADR); //Begin I2C with given slave address
+	Wire.begin(ADR); //Begin I2C with given slave address //FIX! respond with general address call to to allow to set address to other values
 	Wire.onRequest(requestEvent);     // register event
 	Wire.onReceive(receiveEvent);
 
