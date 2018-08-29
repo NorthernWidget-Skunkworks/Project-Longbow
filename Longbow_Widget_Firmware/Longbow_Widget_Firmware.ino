@@ -9,17 +9,17 @@ Version: 0.0.0
 
 This code allows the Widget to send register read and write commands over I2C, which are passed on via RS485.
 
-"The laws of nature are constructed in such a way as to make the universe as interesting as possible."
--Freeman Dyson
-
-///////////////////ADD NEW QUOTE!
+"I feel that I have at last struck the solution of a great problem—and the day is coming when telegraph wires will be laid on to houses 
+just like water or gas—and friends converse with each other without leaving home."
+-Alexander Graham Bell
 
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
 #include <Wire.h>
+#include <EEPROM.h>
 
-uint8_t ADR = 0x13; //FIX! Make address user settable 
+volatile uint8_t ADR = 0x13; //FIX! Make address user settable 
 // char DataIn[10] = {0}; //Initalize the data input register, used to store data to send over RS485
 // char BulkDataFromRover[10] = {0}; //The bulk ascii data recived from the rover device 
 // uint8_t ADR = 0;  //Used to store the sent/rec address
@@ -36,12 +36,15 @@ uint8_t ADR = 0x13; //FIX! Make address user settable
 
 //FIX in/out nomenclature 
 
-#define DATAWRITE 0x01  //Bitmask for data write of Crtl register 
+#define UART_ON 0x01  //Bitmask for turning UART on
+#define DATAWRITE 0x02  //Bitmask for data write of Crtl register 
+
+// #define DATAWRITE 0x01  //Bitmask for data write of Crtl register 
 #define SOF '['
 #define EOF ']'
 
 volatile uint8_t Ctrl = 0; //Control register to determine function of device 
-
+volatile uint8_t Baud = 4; //Used to set baud rate, 4800 by default, FIX!
 volatile char ADR_In[2] = {0};  //Input address
 volatile char RegID_In[2] = {0}; //Input register ID
 volatile char Data_In[10] = {0}; //Input data
@@ -52,9 +55,11 @@ volatile char ADR_Out[2]; //Output address (from slave)
 volatile char RegID_Out[2] = {0}; //Output register ID (from slave)
 volatile char Data_Out[10] = {0}; //Output data (From slave)
 volatile char Format_Out = 0; //Output data fromatter (from slave)
-volatile char CRC_Out[3] = {0}; //Output crc check (from slave)
+volatile char CRC_Out[4] = {0}; //Output crc check (from slave)
 
 volatile uint8_t Reg = 0; //Used to point to which register to read out
+
+bool UartActive = false; //Used to keep track if UART is on
 
 // byte Dummy = '2'; //DEBUG! 
 // unsigned long Timeout = 1000; //Wait up to one second for readings
@@ -62,10 +67,26 @@ volatile uint8_t Reg = 0; //Used to point to which register to read out
 void setup() 
 {
 	//FIX! Set address, baud rate, based on EEPROM values 
-	Serial.begin(4800); //FIX! Auto baud rate detect?? Do not turn on UART until contacted over I2C? 
+	// Serial.begin(4800); //FIX! Auto baud rate detect?? Do not turn on UART until contacted over I2C? 
 	//FIX! Make baud rate user settable 
 	// Serial.println("TEST!"); //DEBUG!
+	if(EEPROM.read(0x00) != 'L') {  //If EEPROM is not initialized, like on initial firmware load
+        EEPROM.write(0x01, ADR);  //Set default address value
+        EEPROM.write(0x02, Baud);  //Set default baud value
+        EEPROM.write(0x00, 'L');  //Set initialization flag for EEPROM
+    }
+    else {  //Normally, read address from EEPROM on startup
+        ADR = EEPROM.read(0x01);
+        Baud = EEPROM.read(0x02);
+        // Serial.begin(4800);
+        // Serial.println(ADR); //DEBUG!
+        // Serial.println(Baud); //DEBUG!
+        // Serial.end();
+    }
+
 	Wire.begin(ADR); //Begin I2C with given slave address //FIX! respond with general address call to to allow to set address to other values
+	TWSAM = 0x01; //Allow for general address call, set secondary address to 0x00, set bit to allow matching on this address
+	// TWSAM = 0xC7;
 	Wire.onRequest(requestEvent);     // register event
 	Wire.onReceive(receiveEvent);
 
@@ -100,12 +121,37 @@ void loop()
 			Data_Out[i++] = Serial.read(); 
 		}
 
+		unsigned char TestCRC = GetCRC(Data_Out, i);
+		while(Serial.available() < 1) {
+			delay(1);
+		}
 		Format_Out = Serial.read();
 		i = 0;  //Clear counter to reuse
-		memset(CRC_Out, 0, 3); //Clear CRC_Out manually
-		// while(Serial.peek() != EOF) { //FIX???
-		//     CRC_Out[i++] = Serial.read();
-		// }
+		memset(CRC_Out, 0, 4); //Clear CRC_Out manually
+		char Temp = 0;
+		while(Serial.available() < 2) {
+			delay(1);
+		}
+		delay(20);
+		// CRC_Out[0] = Serial.read(); //DEBUG!
+		i = 0; //DEBUG!
+		// Temp = Serial.read();
+		CRC_Out[i++] = Serial.read();
+		while(Serial.peek() != EOF) { //FIX???
+			// Serial.print(Temp);
+			// Temp = Serial.read();
+			CRC_Out[i++] = Serial.read();
+			// Serial.print(":"); //DEBUG!
+		    // CRC_Out[(i++)%3] = Temp;
+		}
+		CRC_Out[i] = '\0';
+
+
+		Ctrl = Ctrl & 0xF7; //Clear bit 3, packet validity bit
+		if(TestCRC != strtol(CRC_Out, NULL, 10)) Ctrl = Ctrl | 0x08; //Set packet error bit
+		// Ctrl = Ctrl | (CheckCRC() << 3); //Set status of packet validity 
+		// CRC_Out[0] = i; //DEBUG!
+		// Serial.println(i); //DEBUG!
 		// Serial.print("A0 = "); Serial.println(ADR_Out[0]);  ///DEBUG!
 	}
 	// delay(20);
@@ -152,7 +198,7 @@ void loop()
 // 		DataRead = false; //clear flag
 // 	}
 	// Serial.println(Ctrl); //DEBUG!
-	if(Ctrl & DATAWRITE) {
+	if((Ctrl & DATAWRITE) == DATAWRITE) {
 		// Serial.print('x'); //DEBUG!
 	    // if(Format == 'f') {
 	    // 	Serial.print(DataToRover, 6); //FIX decimal hardcode
@@ -168,7 +214,7 @@ void loop()
 	    // Serial.print(Reg, HEX); //Print register to write data to
 	    // if(Reg < 0x10) Serial.print('0');  //Ensure reg value is always 2 chars 
     	// Serial.print('\r'); //print EOF
-
+    	// Serial.print(Ctrl, HEX); //DEBUG!
     	Serial.print(SOF);
     	PrintArray(ADR_In, 2);
     	PrintArray(RegID_In, 2);
@@ -180,7 +226,18 @@ void loop()
     	}
     	Serial.print(EOF);
     	Serial.print("\n"); //Print formatting character
-    	Ctrl = Ctrl & 0xFE; //Clear data write bit
+    	Ctrl = Ctrl & 0xFD; //Clear data write bit  //FIX to be modular with masking!
+	}
+
+	if((Ctrl & UART_ON) == 1 && !UartActive) {  //Turn on UART only when directed to over I2C
+		Serial.begin(Baud*1200);
+		UartActive = true; //Set uart running flag
+	}
+
+
+	if((Ctrl & UART_ON) == 0 && UartActive) {  //If UART ON bit is cleared, and UART is running, turn off UART
+		Serial.end(); //Turn off serial
+		UartActive = false; //Clear uart running flag
 	}
 	delay(1);
 
@@ -190,6 +247,23 @@ void PrintArray(char *Data, uint8_t Len) {
 	for(int i = 0; i < Len; i++) {
 		Serial.print(Data[i]);
 	}
+}
+
+unsigned char GetCRC(const unsigned char * data, const unsigned int size)
+{
+    unsigned char crc = 0;
+    for ( unsigned int i = 0; i < size; ++i )
+    {
+        unsigned char inbyte = data[i];
+        for ( unsigned char j = 0; j < 8; ++j )
+        {
+            unsigned char mix = (crc ^ inbyte) & 0x01;
+            crc >>= 1;
+            if ( mix ) crc ^= 0x8C;
+            inbyte >>= 1;
+        }
+    }
+    return crc;
 }
 
 void requestEvent()
@@ -236,13 +310,21 @@ void requestEvent()
 			break;
 
 		case 4: //Write out format character
-			Wire.write(Format_In); 
+			Wire.write(Format_Out); 
 			break;
 
 		case 5:  //FIX calulcate CRC intenrally??
 			for(int i = 0; i < 3; i++) {
 				Wire.write(CRC_Out[i]);  //write all data out 
 			}
+			break;
+
+		case 96:
+			Wire.write(Baud); //Return baud rate
+			break; 
+
+		case 98:
+			Wire.write(ADR); //Return address
 			break;
 	}
 }
@@ -310,6 +392,17 @@ void receiveEvent(int DataLen)
 					CRC_In[i++] = Wire.read();
 				}
 				break;
+
+			case 97:
+				// Baud = Wire.read();
+				EEPROM.write(0x02, Wire.read()); //Update EEPROM
+				break;
+
+			case 99:
+				// ADR = Wire.read();
+				EEPROM.write(0x01, Wire.read()); //Update EEPROM
+				break;
+
 
 			default:  //Clear buffer by default
 				while(Wire.available()) {
