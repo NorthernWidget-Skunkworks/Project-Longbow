@@ -1,9 +1,27 @@
+/******************************************************************************
+Longbow_Interface_I2C.ino
+Software to be used on an Arduino or data logger to comunicate with a Longbow Widget over I2C for demo purposes
+Bobby Schulz @ Northern Widget LLC
+8/29/2018
+https://github.com/NorthernWidget-Skunkworks/Project-Longbow
+
+This code allows the user to talk to an end device (designed for the TP-Downhole Longbow) using the Longbow Widget
+as an intermediary device. The comunication between the Arduino and the Longbow widget is I2C, and in turn, the Widget and
+the TP-Downhole comunicate over RS485 using the Longbow protocol 
+
+"I feel that I have at last struck the solution of a great problem—and the day is coming when telegraph wires will be laid on to houses 
+just like water or gas—and friends converse with each other without leaving home."
+-Alexander Graham Bell
+
+Distributed as-is; no warranty is given.
+******************************************************************************/
+
 #include <Wire.h>
 #include <stdlib.h>
 
-uint8_t ADR = 0x21;
-char ADR_Send[2] = {'1', '3'};
-char RegID_Send[2] = {'0', '0'};
+uint8_t ADR = 0x22;  //Address of I2C device (Longbow Widget)
+
+uint8_t ADR_Slave = 13; //Address of the slave device on RS485 (TP-Downhole Longbow)
 
 uint8_t Control = 0; //Control byte
 uint8_t ADR_Out = 0; //Output address (from slave)
@@ -13,105 +31,28 @@ char Format_Out = 0; //Output data fromatter (from slave)
 uint8_t CRC_Out = 0; //Output crc check (from slave)
 
 void setup() {
-  Wire.begin();
-  Serial.begin(9600);
-  Serial.println("Welcome to the Machine...");
+  Wire.begin();  //Begin I2C
+  Serial.begin(9600);  //Begin Serial
+  Serial.println("Welcome to the Machine...");  //Send ubiquitious alive message 
 }
 
 void loop() {
-//   // put your main code here, to run repeatedly:
-//   SendData(0, 1); //Turn on UART
-//   SendData(1, ADR_Send, 2);
-//   SendData(2, RegID_Send, 2);
-//   SendData(0, 1); //Set send bit
-//   SendData(0, 3); //Set send bit, keep UART on
-//   delay(1000);
 
-//   Wire.beginTransmission(ADR);
-//   Wire.write(3);
-// //  Wire.write(1);
-//   Wire.endTransmission();
+	GetPacket(5, ADR_Slave);  //Update values
 
-//   Wire.requestFrom(ADR, 2);
-// //  while(Wire.available() < 2) {
-// //    delay(1);
-// //  }
-//   Serial.println(ADR, HEX);
-//   Serial.println(Wire.read());
-//   Serial.println(Wire.read());
-//   delay(1000);
-
-//   Wire.beginTransmission(0x13);
-//   Wire.write(1);
-// //  Wire.write(1);
-//   Wire.endTransmission();
-  
-//   Wire.requestFrom(0x13, 2);
-// //  while(Wire.available() < 2) {
-// //    delay(1);
-// //  }
-//   Serial.println(0x13, HEX);
-//   Serial.println(Wire.read());
-//   Serial.println(Wire.read());
-
-//   char Temp = Serial.read(); 
-//   if(Temp == 'S') {
-//     SendData(0, 0); //Turn off uart
-//     while(Serial.read() != 's') {
-//       delay(1);
-//     }
-//   }
-
-//   if(Temp == 'A') {
-//     Wire.beginTransmission(0x00);
-//     Wire.write(99);
-//     Wire.write(0x13);
-//     Serial.println(Wire.endTransmission());
-//   }
-
-//   if(Temp == 'a') {
-//     Wire.beginTransmission(0x00);
-//     Wire.write(99);
-//     Wire.write(0x21);
-//     Serial.println(Wire.endTransmission());
-//   }
-
-//   if(Temp == 'B') {
-//     Wire.beginTransmission(0x00);
-//     Wire.write(97);
-//     Wire.write(8);
-//     Serial.println(Wire.endTransmission());
-//   }
-
-//   if(Temp == 'b') {
-//     Wire.beginTransmission(0x00);
-//     Wire.write(97);
-//     Wire.write(4);
-//     Serial.println(Wire.endTransmission());
-//   }
-
-for(int i = 0; i < 3; i++) {
-	GetPacket(i, 13);
-	Serial.println(Control);
-	Serial.println(ADR_Out);
-	Serial.println(RegID_Out);
-	Serial.println(Data_Out);
-	Serial.println(Format_Out);
-	Serial.println(CRC_Out);
-	Serial.print("\n");
-	delay(10);
-}
-
-	GetPacket(5, 13);  //Update values
-	Serial.println(Control);
-	Serial.println(ADR_Out);
-	Serial.println(RegID_Out);
-	Serial.println(Data_Out);
-	Serial.println(Format_Out);
-	Serial.println(CRC_Out);
+	for(int i = 0; i < 3; i++) {  //Get data packets
+		GetPacket(i, ADR_Slave);
+		Serial.println(Control);
+		Serial.println(ADR_Out);
+		Serial.println(RegID_Out);
+		Serial.println(Data_Out);
+		Serial.println(Format_Out);
+		Serial.println(CRC_Out);
+		Serial.print("\n");
+		delay(10);
+	}
 	Serial.print("\n\n\n\n");
 	delay(2000);
-  
 }
 
 uint8_t GetAddress() 
@@ -153,71 +94,53 @@ uint8_t GetPacket(uint8_t Reg, uint8_t Adr)
 
 	char DataTemp[10] = {0};
 	char CRC_Temp[4] = {0};
-	// char FormatTemp = 0;
+
 	delay(100); //Wait for Longbow Widget to populate the registers, FIX! Read command register and wait instead 
 	
-	GetData(DataTemp, 0, 1);
-	Control = DataTemp[0];
+	GetData(DataTemp, 0, 1);  //Call for control data
+	Control = DataTemp[0];  
 
-	GetData(DataTemp, 1, 2);
-	ADR_Out = CharToInt(DataTemp);
+	GetData(DataTemp, 1, 2);  //Call for Address data
+	ADR_Out = CharToInt(DataTemp);  //Convert to int
 
-	GetData(DataTemp, 2, 2);
-	RegID_Out = CharToInt(DataTemp);
+	GetData(DataTemp, 2, 2);  //Call for Register ID 
+	RegID_Out = CharToInt(DataTemp);  //Convert to int
 	
-	GetData(DataTemp, 3, 10);
-	// sscanf(DataTemp, "%f", &Data_Out);
-	// Data_Out = (float)atof(DataTemp);
-	Data_Out = strtod(DataTemp, NULL);
-	// Serial.println(DataTemp[0]); //DEBUG!
+	GetData(DataTemp, 3, 10);  //Call for raw data
+	Data_Out = strtod(DataTemp, NULL);  //Convert to float 
 
 	Format_Out = GetByte(4); //Read format character
 
-	GetData(CRC_Temp, 5, 3);
-	// sscanf(DataTemp, "%d", &CRC_Out);
-
-	// for(int i = 0; i < 4; i++) {
-	// 	Serial.print(CRC_Temp[i]);
-	// 	Serial.print(" ");
-	// }
-	// Serial.print("\n");
-
-	// Serial.print(DataTemp[0]);  //DEBUG!
-	// Serial.print(DataTemp[1]); //DEBUG!
-	// Serial.print(DataTemp[2]); //DEBUG!
-	CRC_Out = strtol(CRC_Temp, NULL, 10);
-	// sscanf(CRC_Temp, "%d", &CRC_Out); 
-	// while()
-	// CRC_Out = (CRC_Temp[0] - 48)*10 + (CRC_Temp[1] - 48);
-	// Serial.println(DataTemp[2]); //DEBUG!
+	GetData(CRC_Temp, 5, 3);  //Call for CRC
+	CRC_Out = strtol(CRC_Temp, NULL, 10);  //Convert to int
 }
 
-char GetByte(uint8_t RegID)
+char GetByte(uint8_t RegID)  //Read single byte of data
 {
-	Wire.beginTransmission(ADR);
+	Wire.beginTransmission(ADR);  //Send register value
 	Wire.write(RegID);
 	Wire.endTransmission();
 
-	Wire.requestFrom(ADR, 1);
+	Wire.requestFrom(ADR, 1);  //Read from register
 	while(Wire.available() < 1); 
 	return Wire.read();
 }
 
-void GetData(char *Data, uint8_t RegID, uint8_t NumBytes)
+void GetData(char *Data, uint8_t RegID, uint8_t NumBytes)  //Call for an array of data
 {
-	Wire.beginTransmission(ADR);
+	Wire.beginTransmission(ADR);  //Send register value
 	Wire.write(RegID);
 	Wire.endTransmission();
 
-	Wire.requestFrom(ADR, NumBytes);
+	Wire.requestFrom(ADR, NumBytes);  //Read multiple bytes from register
 	int i = 0;
 	for(i = 0; i < NumBytes; i++) {
 		Data[i] = Wire.read();
 	}
-	Data[i + 1]  = '\0';
+	Data[i + 1]  = '\0';  //Add null terminator 
 }
 
-uint8_t CharToInt(char *Data) 
+uint8_t CharToInt(char *Data) //Convert 2 char bytes (0 ~ 99) to integer
 {
     return (Data[0] - 48)*10 + (Data[1] - 48);
 }
@@ -228,22 +151,20 @@ void IntToArray(char *Reg, uint8_t Data)  //Convert Data value (0 ~ 99) to Char 
 	Reg[0] = ((Data - (Data % 10))/10) + 48;
 }
 
-void SendData(uint8_t Reg, char *Data, uint8_t Len) 
+void SendData(uint8_t Reg, char *Data, uint8_t Len) //Writes out array to given register on reciver
 {
   Wire.beginTransmission(ADR);
   Wire.write(Reg);
-  for(int i = 0; i < Len; i++) {
+  for(int i = 0; i < Len; i++) {  //Write multiple bytes 
     Wire.write(Data[i]);  
   }
-//  Serial.println(Wire.endTransmission());
   Wire.endTransmission();
 }
 
-void SendData(uint8_t Reg, uint8_t Data) 
+void SendData(uint8_t Reg, uint8_t Data) //Writes out single byte to register on reciver 
 {
   Wire.beginTransmission(ADR);
   Wire.write(Reg);
   Wire.write(Data);
-//  Serial.println(Wire.endTransmission());
   Wire.endTransmission();
 }
