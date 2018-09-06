@@ -179,12 +179,15 @@
 <text x="39.37" y="19.05" size="0.8128" layer="52" font="vector" ratio="16" rot="MR0">TX-</text>
 <text x="39.37" y="16.51" size="0.8128" layer="52" font="vector" ratio="16" rot="MR0">TX+</text>
 <text x="39.37" y="13.97" size="0.8128" layer="52" font="vector" ratio="16" rot="MR0">Vout</text>
-<text x="28.194" y="19.431" size="0.8128" layer="122" font="vector" ratio="16" rot="MR45">Northern Widget
+<text x="28.194" y="19.431" size="0.8128" layer="52" font="vector" ratio="16" rot="MR45">Northern Widget
 Bobby Schulz</text>
 <wire x1="9.398" y1="14.986" x2="10.795" y2="13.589" width="0.254" layer="52" curve="-95.452622"/>
 <wire x1="10.795" y1="12.319" x2="9.398" y2="10.922" width="0.254" layer="52" curve="-95.452622"/>
 <text x="9.906" y="12.954" size="1.27" layer="52" font="vector" ratio="15" rot="MR0" align="center">±</text>
 <wire x1="10.795" y1="13.589" x2="10.795" y2="12.319" width="0.254" layer="52"/>
+<text x="36.195" y="26.4795" size="0.8128" layer="52" font="vector" ratio="15" rot="MR0" align="center">To Sensor</text>
+<text x="8.255" y="26.4795" size="0.8128" layer="52" font="vector" ratio="15" rot="MR0" align="center">To Logger</text>
+<text x="10.287" y="20.701" size="0.8128" layer="52" font="vector" ratio="15" rot="MR270" align="center">3.3v ~ 5v</text>
 </plain>
 <libraries>
 <library name="bschulz_passives">
@@ -318,7 +321,7 @@ Bobby Schulz</text>
 <wire x1="-4.375" y1="-2" x2="4.375" y2="-2" width="0.00175" layer="57"/>
 <wire x1="4.375" y1="-2" x2="4.375" y2="2" width="0.00175" layer="57"/>
 <wire x1="4.375" y1="2" x2="-4.375" y2="2" width="0.00175" layer="57"/>
-<text x="-5.08" y="0" size="0.6096" layer="21" font="vector" ratio="15" rot="R90" align="center">&gt;NAME</text>
+<text x="-5.08" y="0" size="0.6096" layer="25" font="vector" ratio="15" rot="R90" align="center">&gt;NAME</text>
 </package>
 <package name="1X06_SCREW">
 <description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
@@ -514,6 +517,12 @@ Source: http://focus.ti.com/lit/ds/slcs146e/slcs146e.pdf</description>
 <wire x1="0.725" y1="-0.525" x2="0.725" y2="0.525" width="0.127" layer="21"/>
 <wire x1="0.725" y1="0.525" x2="-0.725" y2="0.525" width="0.127" layer="21"/>
 <circle x="-1.016" y="-0.762" radius="0.127" width="0.127" layer="21"/>
+</package>
+<package name="CREATIVE_COMMONS">
+<text x="0" y="3.81" size="1.27" layer="48" align="center">Released under the Creative Commons Attribution Share-Alike 4.0 License</text>
+<text x="0" y="2.032" size="1.27" layer="48" align="center">https://creativecommons.org/licenses/by-sa/4.0/</text>
+<text x="-12.7" y="0" size="1.27" layer="48" align="center">Designed by:</text>
+<text x="-5.842" y="-0.127" size="1.27" layer="48" align="center-left">&gt;DESIGNER</text>
 </package>
 </packages>
 </library>
@@ -863,6 +872,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="MF" value="Yageo" x="25.4" y="22.606" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="25.4" y="22.606" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE_PART" value="" x="25.4" y="22.606" size="1.778" layer="27" display="off"/>
+</element>
+<element name="FRAME1" library="bschulz" package="CREATIVE_COMMONS" value="" x="-29.89530625" y="0">
+<attribute name="DESIGNER" value="Bobby Schulz" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
+<attribute name="PROJECT" value="Longbow" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
+<attribute name="REV" value="v0.1" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
 </element>
 </elements>
 <signals>
