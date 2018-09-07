@@ -744,9 +744,9 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE_PART" value="10k" x="22.479" y="12.065" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
 <element name="U$1" library="bschulz" package="SO08" value="SN65HVD30" x="19.812" y="24.638" smashed="yes" rot="R270">
-<attribute name="DIGIKEY" value="296-31719-1-ND" x="19.812" y="24.638" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="DIGIKEY" value="296-19625-1-ND" x="19.812" y="24.638" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MF" value="TI" x="19.812" y="24.638" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MPN" value="SN65HVD3082EDR" x="19.812" y="24.638" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MPN" value="SN65HVD30DR" x="19.812" y="24.638" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="19.812" y="27.813" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
 </element>
 <element name="U$2" library="bschulz" package="SOIC_14" value="ATTINY441/841841" x="27.559" y="14.097">
