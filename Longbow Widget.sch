@@ -741,12 +741,6 @@ Soure: &lt;a href="http://www.ti.com/lit/ds/symlink/ads7042.pdf"&gt; Data sheet 
 <rectangle x1="-4.5" y1="0.5" x2="-3.5" y2="1.5" layer="51" rot="R180"/>
 <rectangle x1="-6.5" y1="0.5" x2="-5.5" y2="1.5" layer="51" rot="R180"/>
 </package>
-<package name="CREATIVE_COMMONS">
-<text x="0" y="3.81" size="1.27" layer="48" align="center">Released under the Creative Commons Attribution Share-Alike 4.0 License</text>
-<text x="0" y="2.032" size="1.27" layer="48" align="center">https://creativecommons.org/licenses/by-sa/4.0/</text>
-<text x="-12.7" y="0" size="1.27" layer="48" align="center">Designed by:</text>
-<text x="-5.842" y="-0.127" size="1.27" layer="48" align="center-left">&gt;DESIGNER</text>
-</package>
 </packages>
 <symbols>
 <symbol name="SN65HVD3X">
@@ -1529,7 +1523,7 @@ Digikey: &lt;br&gt;&lt;a href = "https://www.digikey.com/product-detail/en/texas
 <gate name="G$2" symbol="DOCFIELD" x="172.72" y="0" addlevel="always"/>
 </gates>
 <devices>
-<device name="" package="CREATIVE_COMMONS">
+<device name="">
 <technologies>
 <technology name=""/>
 </technologies>
