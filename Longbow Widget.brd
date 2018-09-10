@@ -518,12 +518,6 @@ Source: http://focus.ti.com/lit/ds/slcs146e/slcs146e.pdf</description>
 <wire x1="0.725" y1="0.525" x2="-0.725" y2="0.525" width="0.127" layer="21"/>
 <circle x="-1.016" y="-0.762" radius="0.127" width="0.127" layer="21"/>
 </package>
-<package name="CREATIVE_COMMONS">
-<text x="0" y="3.81" size="1.27" layer="48" align="center">Released under the Creative Commons Attribution Share-Alike 4.0 License</text>
-<text x="0" y="2.032" size="1.27" layer="48" align="center">https://creativecommons.org/licenses/by-sa/4.0/</text>
-<text x="-12.7" y="0" size="1.27" layer="48" align="center">Designed by:</text>
-<text x="-5.842" y="-0.127" size="1.27" layer="48" align="center-left">&gt;DESIGNER</text>
-</package>
 </packages>
 </library>
 </libraries>
@@ -883,11 +877,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="MPN" value="CRCW060310R0FKEAHP" x="25.4" y="22.606" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE_PART" value="10" x="25.4" y="22.606" size="1.778" layer="27" display="off"/>
 </element>
-<element name="FRAME1" library="bschulz" package="CREATIVE_COMMONS" value="" x="-29.89530625" y="0">
-<attribute name="DESIGNER" value="Bobby Schulz" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
-<attribute name="PROJECT" value="Longbow" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
-<attribute name="REV" value="v0.1" x="-29.89530625" y="0" size="1.778" layer="27" display="off"/>
-</element>
 </elements>
 <signals>
 <signal name="RX">
@@ -1028,6 +1017,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="15.382" y1="22.479" x2="15.382" y2="22.972" width="0.1524" layer="1"/>
 <wire x1="15.067" y1="23.287" x2="15.067" y2="23.605" width="0.1524" layer="1"/>
 <wire x1="15.382" y1="22.972" x2="15.067" y2="23.287" width="0.1524" layer="1"/>
+<wire x1="28.829" y1="21.4686375" x2="28.829" y2="21.59" width="0" layer="19" extent="16-16"/>
+<wire x1="36.195" y1="11.745821875" x2="29.21" y2="15.24" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="SCL">
 <contactref element="U$2" pad="9"/>
