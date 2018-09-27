@@ -21,10 +21,12 @@ Distributed as-is; no warranty is given.
 
 volatile uint8_t ADR = 0x22; //FIX! Make address user settable 
 
+const uint8_t Vout_Ctrl = 2; //external voltage switch controlled by pin 2, active low
 //FIX in/out nomenclature 
 
 #define UART_ON 0x01  //Bitmask for turning UART on
 #define DATAWRITE 0x02  //Bitmask for data write of Crtl register 
+#define RESET 0x80 //Bitmask for reset command
 
 #define SOF '['  //Define Start Of Frame character
 #define EOF ']'  //Define End Of Frame character 
@@ -49,6 +51,9 @@ bool UartActive = false; //Used to keep track if UART is on
 
 void setup() 
 {
+	pinMode(Vout_Ctrl, OUTPUT); //Make power control pin an output
+	digitalWrite(Vout_Ctrl, LOW); //Turn power on by default
+
 	if(EEPROM.read(0x00) != 'L') {  //If EEPROM is not initialized, like on initial firmware load
         EEPROM.write(0x01, ADR);  //Set default address value
         EEPROM.write(0x02, Baud);  //Set default baud value
@@ -139,6 +144,15 @@ void loop()
 	if((Ctrl & UART_ON) == 0 && UartActive) {  //If UART ON bit is cleared, and UART is running, turn off UART
 		Serial.end(); //Turn off serial
 		UartActive = false; //Clear uart running flag
+	}
+
+	if((Ctrl & RESET) == RESET) {  //If reset bit if set
+		digitalWrite(Vout_Ctrl, HIGH);  //Turn external power off
+		delay(100);  //Wait a jiffy (1/60 second)
+		digitalWrite(Vout_Ctrl, LOW);  //Turn on external power
+		// while(Serial.read() != 'r') { //Wait until recived conformation of reset  //FIX add timeout!
+			Serial.print("!"); //Print escape character
+		// }
 	}
 	delay(1);
 
@@ -258,7 +272,6 @@ void receiveEvent(int DataLen) //respond to recipt of data
 			case 99:  //Read in address setting 
 				EEPROM.write(0x01, Wire.read()); //Update EEPROM
 				break;
-
 
 			default:  //Clear buffer by default
 				while(Wire.available()) {

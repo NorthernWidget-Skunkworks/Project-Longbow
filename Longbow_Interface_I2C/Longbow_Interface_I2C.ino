@@ -16,6 +16,7 @@ just like water or gas—and friends converse with each other without leaving ho
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
+#include <Arduino.h>
 #include <Wire.h>
 #include <stdlib.h>
 
@@ -31,26 +32,55 @@ char Format_Out = 0; //Output data fromatter (from slave)
 uint8_t CRC_Out = 0; //Output crc check (from slave)
 
 void setup() {
+  pinMode(19, OUTPUT);
+  digitalWrite(19, LOW);
   Wire.begin();  //Begin I2C
   Serial.begin(9600);  //Begin Serial
   Serial.println("Welcome to the Machine...");  //Send ubiquitious alive message 
 }
 
 void loop() {
-
+	// digitalWrite(19, HIGH);
+	// delay(5000);
+	// digitalWrite(19, LOW);
+	// delay(5000);
+	SetWidgetAddress(ADR); 
+	Reset();
+	Serial.println("BANG1!"); //DEBUG!
 	GetPacket(5, ADR_Slave);  //Update values
-
+	Serial.println("BANG2!"); //DEBUG!
 	for(int i = 0; i < 3; i++) {  //Get data packets
 		GetPacket(i, ADR_Slave);
+    	Serial.println("SOF");
 		Serial.println(Control);
 		Serial.println(ADR_Out);
 		Serial.println(RegID_Out);
 		Serial.println(Data_Out);
 		Serial.println(Format_Out);
 		Serial.println(CRC_Out);
-		Serial.print("\n");
+		Serial.print("EOF\n");
 		delay(10);
 	}
+	// Serial.println("BANG!"); //DEBUG!
+	// SetAddress(0x45, 13); //Change address
+
+	GetPacket(98, 0x45);
+	Serial.print("ADR 0x45 = ");
+	Serial.println(Data_Out);
+	GetPacket(98, ADR_Slave);
+	Serial.print("ADR 13 = ");
+	Serial.println(Data_Out);
+
+	Reset();
+	Serial.println("RESET!");
+
+	GetPacket(98, 0x45);
+	Serial.print("ADR 0x45 = ");
+	Serial.println(Data_Out);
+	GetPacket(98, 13);
+	Serial.print("ADR 13 = ");
+	Serial.println(Data_Out);
+
 	Serial.print("\n\n\n\n");
 	delay(2000);
 }
@@ -78,6 +108,36 @@ char GetFormat()
 uint8_t GetCRC()
 {
 
+}
+
+uint8_t SetAddress(uint8_t NewAdr, uint8_t Adr) 
+{
+	char ADR_Temp[2] = {0};
+	char ADR_New[2] = {0};
+	char AddressReg[2] = {'9', '9'}; 
+	IntToArray(ADR_Temp, Adr); //Convert Adr to char array
+	IntToArray(ADR_New, NewAdr); //Convert new address to char array
+
+	SendData(0, 1);  //Turn on UART
+	SendData(1, ADR_Temp, 2);  //Load I2C register 
+	SendData(2, AddressReg, 2);  //Load downhole register
+	SendData(3, ADR_New, 2);  //Load data
+	SendData(0, 3); //Set send bit, keep UART on
+}
+
+uint8_t SetWidgetAddress(uint8_t NewAdr)
+{
+	Wire.beginTransmission(0x00);  //Use general call address
+	Wire.write(99);  //Write to address set register
+	Wire.write(NewAdr);  //Write new address
+	Serial.println(Wire.endTransmission()); //DEBUG!
+}
+
+uint8_t Reset() 
+{
+  SendData(0, 1); //Turn on UART
+  SendData(0, 0x81); //Keep UART on, command a reset
+  delay(100);
 }
 
 uint8_t GetPacket(uint8_t Reg, uint8_t Adr)
@@ -122,7 +182,7 @@ char GetByte(uint8_t RegID)  //Read single byte of data
 	Wire.endTransmission();
 
 	Wire.requestFrom(ADR, 1);  //Read from register
-	while(Wire.available() < 1); 
+	// while(Wire.available() < 1); 
 	return Wire.read();
 }
 
@@ -158,7 +218,7 @@ void SendData(uint8_t Reg, char *Data, uint8_t Len) //Writes out array to given 
   for(int i = 0; i < Len; i++) {  //Write multiple bytes 
     Wire.write(Data[i]);  
   }
-  Wire.endTransmission();
+  Serial.println(Wire.endTransmission()); //DEBUG!
 }
 
 void SendData(uint8_t Reg, uint8_t Data) //Writes out single byte to register on reciver 
