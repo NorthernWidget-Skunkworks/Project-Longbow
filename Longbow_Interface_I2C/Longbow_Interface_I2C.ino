@@ -45,10 +45,10 @@ void loop() {
 	// digitalWrite(19, LOW);
 	// delay(5000);
 	SetWidgetAddress(ADR); 
-	Reset();
-	Serial.println("BANG1!"); //DEBUG!
+	// Reset();
+	// Serial.println("BANG1!"); //DEBUG!
 	GetPacket(5, ADR_Slave);  //Update values
-	Serial.println("BANG2!"); //DEBUG!
+	// Serial.println("BANG2!"); //DEBUG!
 	for(int i = 0; i < 3; i++) {  //Get data packets
 		GetPacket(i, ADR_Slave);
     	Serial.println("SOF");
@@ -64,22 +64,22 @@ void loop() {
 	// Serial.println("BANG!"); //DEBUG!
 	// SetAddress(0x45, 13); //Change address
 
-	GetPacket(98, 0x45);
-	Serial.print("ADR 0x45 = ");
-	Serial.println(Data_Out);
-	GetPacket(98, ADR_Slave);
-	Serial.print("ADR 13 = ");
-	Serial.println(Data_Out);
+	// GetPacket(98, 0x45);
+	// Serial.print("ADR 0x45 = ");
+	// Serial.println(Data_Out);
+	// GetPacket(98, ADR_Slave);
+	// Serial.print("ADR 13 = ");
+	// Serial.println(Data_Out);
 
-	Reset();
-	Serial.println("RESET!");
+	// Reset();
+	// Serial.println("RESET!");
 
-	GetPacket(98, 0x45);
-	Serial.print("ADR 0x45 = ");
-	Serial.println(Data_Out);
-	GetPacket(98, 13);
-	Serial.print("ADR 13 = ");
-	Serial.println(Data_Out);
+	// GetPacket(98, 0x45);
+	// Serial.print("ADR 0x45 = ");
+	// Serial.println(Data_Out);
+	// GetPacket(98, 13);
+	// Serial.print("ADR 13 = ");
+	// Serial.println(Data_Out);
 
 	Serial.print("\n\n\n\n");
 	delay(2000);
