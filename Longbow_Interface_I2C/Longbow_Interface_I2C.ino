@@ -37,6 +37,10 @@ void setup() {
   Wire.begin();  //Begin I2C
   Serial.begin(9600);  //Begin Serial
   Serial.println("Welcome to the Machine...");  //Send ubiquitious alive message 
+  Wire.beginTransmission(ADR);
+  Serial.print("I2C Fault = "); //DEBUG!
+  Serial.println(Wire.endTransmission());
+  // AddressSearch();
 }
 
 void loop() {
@@ -44,7 +48,7 @@ void loop() {
 	// delay(5000);
 	// digitalWrite(19, LOW);
 	// delay(5000);
-	SetWidgetAddress(ADR); 
+//	SetWidgetAddress(ADR); 
 	// Reset();
 	// Serial.println("BANG1!"); //DEBUG!
 	GetPacket(5, ADR_Slave);  //Update values
@@ -108,6 +112,18 @@ char GetFormat()
 uint8_t GetCRC()
 {
 
+}
+
+void AddressSearch()
+{
+	Serial.println("Begin Address Search...");
+	for(int i = 1; i <= 99; i++) {
+		GetPacket(98, i);
+		if(Data_Out == i) {
+			Serial.print("Device @ ");
+			Serial.println(i);
+		}
+	}
 }
 
 uint8_t SetAddress(uint8_t NewAdr, uint8_t Adr) 
@@ -182,7 +198,7 @@ char GetByte(uint8_t RegID)  //Read single byte of data
 	Wire.endTransmission();
 
 	Wire.requestFrom(ADR, 1);  //Read from register
-	// while(Wire.available() < 1); 
+	 while(Wire.available() < 1); 
 	return Wire.read();
 }
 
