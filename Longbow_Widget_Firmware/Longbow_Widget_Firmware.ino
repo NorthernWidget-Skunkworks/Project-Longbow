@@ -54,15 +54,15 @@ void setup()
 	pinMode(Vout_Ctrl, OUTPUT); //Make power control pin an output
 	digitalWrite(Vout_Ctrl, LOW); //Turn power on by default
 
-	if(EEPROM.read(0x00) != 'L') {  //If EEPROM is not initialized, like on initial firmware load
-        EEPROM.write(0x01, ADR);  //Set default address value
-        EEPROM.write(0x02, Baud);  //Set default baud value
-        EEPROM.write(0x00, 'L');  //Set initialization flag for EEPROM
-    }
-    else {  //Normally, read address from EEPROM on startup
+	// if(EEPROM.read(0x00) != 'L') {  //If EEPROM is not initialized, like on initial firmware load
+        // EEPROM.write(0x01, ADR);  //Set default address value
+        // EEPROM.write(0x02, Baud);  //Set default baud value
+        // EEPROM.write(0x00, 'L');  //Set initialization flag for EEPROM
+    // }
+    // else {  //Normally, read address from EEPROM on startup
         ADR = EEPROM.read(0x01);
         Baud = EEPROM.read(0x02);
-    }
+    // }
 
 	Wire.begin(ADR); //Begin I2C with given slave address //FIX! respond with general address call to to allow to set address to other values
 	TWSAM = 0x01; //Allow for general address call, set secondary address to 0x00, set bit to allow matching on this address
@@ -266,11 +266,11 @@ void receiveEvent(int DataLen) //respond to recipt of data
 				break;
 
 			case 97:  //Read in baud rate setting
-				EEPROM.write(0x02, Wire.read()); //Update EEPROM
+				// EEPROM.write(0x02, Wire.read()); //Update EEPROM
 				break;
 
 			case 99:  //Read in address setting 
-				EEPROM.write(0x01, Wire.read()); //Update EEPROM
+				// EEPROM.write(0x01, Wire.read()); //Update EEPROM
 				break;
 
 			default:  //Clear buffer by default

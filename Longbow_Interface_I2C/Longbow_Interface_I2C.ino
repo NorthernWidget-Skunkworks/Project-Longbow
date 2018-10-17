@@ -40,7 +40,7 @@ void setup() {
   Wire.beginTransmission(ADR);
   Serial.print("I2C Fault = "); //DEBUG!
   Serial.println(Wire.endTransmission());
-  // AddressSearch();
+  SetAddress(13, 99);
 }
 
 void loop() {
@@ -55,14 +55,14 @@ void loop() {
 	// Serial.println("BANG2!"); //DEBUG!
 	for(int i = 0; i < 3; i++) {  //Get data packets
 		GetPacket(i, ADR_Slave);
-    	Serial.println("SOF");
-		Serial.println(Control);
-		Serial.println(ADR_Out);
-		Serial.println(RegID_Out);
+//    	Serial.println("SOF");
+//		Serial.println(Control);
+//		Serial.println(ADR_Out);
+//		Serial.println(RegID_Out);
 		Serial.println(Data_Out);
-		Serial.println(Format_Out);
-		Serial.println(CRC_Out);
-		Serial.print("EOF\n");
+//		Serial.println(Format_Out);
+//		Serial.println(CRC_Out);
+//		Serial.print("EOF\n");
 		delay(10);
 	}
 	// Serial.println("BANG!"); //DEBUG!
@@ -112,18 +112,6 @@ char GetFormat()
 uint8_t GetCRC()
 {
 
-}
-
-void AddressSearch()
-{
-	Serial.println("Begin Address Search...");
-	for(int i = 1; i <= 99; i++) {
-		GetPacket(98, i);
-		if(Data_Out == i) {
-			Serial.print("Device @ ");
-			Serial.println(i);
-		}
-	}
 }
 
 uint8_t SetAddress(uint8_t NewAdr, uint8_t Adr) 
@@ -234,7 +222,7 @@ void SendData(uint8_t Reg, char *Data, uint8_t Len) //Writes out array to given 
   for(int i = 0; i < Len; i++) {  //Write multiple bytes 
     Wire.write(Data[i]);  
   }
-  Serial.println(Wire.endTransmission()); //DEBUG!
+  Wire.endTransmission(); //DEBUG!
 }
 
 void SendData(uint8_t Reg, uint8_t Data) //Writes out single byte to register on reciver 
