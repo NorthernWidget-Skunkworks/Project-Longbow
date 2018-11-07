@@ -75,8 +75,8 @@ void loop() {
 	// Serial.print("ADR 13 = ");
 	// Serial.println(Data_Out);
 
-	// Reset();
-	// Serial.println("RESET!");
+	 Reset();
+	 Serial.println("RESET!");
 
 	// GetPacket(98, 0x45);
 	// Serial.print("ADR 0x45 = ");
