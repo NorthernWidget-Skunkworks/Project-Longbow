@@ -1,0 +1,45 @@
+Packet Length:
+
+Send:
+SOF - 1
+ADR - 2
+RegID - 2
+EOF - 1
+
+Total: 6
+
+Rec:
+SOF - 1
+ADR - 2
+RegID - 2
+Data - 10
+Format - 1
+CRC - 3
+EOF - 1
+
+Total: 19
+
+Longbow Widget Register Map
+
+Ctrl:
+0 - Turn on UART
+1 - Send, when set, input registers are written over serial
+2 - Sleep mode (??)
+3 - Packet validity (CRC check result)
+
+7 - Reset
+
+
+Baud:
+0 ~ 8 - Baud rate setting bits (Baud Rate = Baud*1200)
+
+
+I2C send data:
+
+I2C.beginTransmission();
+I2C.write(ADR);
+I2C.endTransmission();
+
+I2C.beginTransmission();
+I2C.write(ADR);
+I2C.endTransmission();
