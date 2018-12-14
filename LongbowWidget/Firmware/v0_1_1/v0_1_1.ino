@@ -1,11 +1,11 @@
 /******************************************************************************
-v0_1_0.cpp
+v0_1_1.cpp
 Firmware to be placed on the Longbow Widget microcontroller to interface with Longbow type comunications
 Bobby Schulz @ Northern Widget LLC
-8/22/2018
+12/13/2018
 https://github.com/NorthernWidget-Skunkworks/Project-Longbow
 
-Firmware Version: 0.1.0
+Firmware Version: 0.1.1
 Compatable Hardware: v0.2, NOT compatable with v0.1
 
 This code allows the Widget to send register read and write commands over I2C, which are passed on via RS485.
@@ -20,8 +20,7 @@ Distributed as-is; no warranty is given.
 /**********
 Dev Notes:
 - Does not support variable address and baud, EEPROM problem not yet solved 
-- Added support for disabling RS-485 output
-- Added support for disabling external UART once I2C mode is active 
+- Fixed data corruption issue with v0.2 hardware
 ***********/
 
 #include <Wire.h>
@@ -156,8 +155,10 @@ void loop()
 	}
 
 	if((Ctrl & UART_ON) == 1 && !UartActive) {  //Turn on UART only when directed to over I2C
+		digitalWrite(DE, LOW); //Disable RS-485 output before adjusting Serial config
 		digitalWrite(UART_EN, LOW); //Disable external UART to prevent clash 
 		Serial.begin(Baud*1200);  //Begin Serial at the user defined speed
+		digitalWrite(DE, HIGH); //Re-enable RS-485 output once new serial configuration setup
 		UartActive = true; //Set uart running flag
 	}
 
