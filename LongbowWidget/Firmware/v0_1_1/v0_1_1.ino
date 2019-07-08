@@ -170,18 +170,20 @@ void loop()
 
 	if((Ctrl & RESET) == RESET) {  //If reset bit if set
 		//Turn off RS485 to prevent voltage leak sensor 
-		digitalWrite(RE, HIGH); //Turn recieve off
-		digitalWrite(DE, LOW); //Turn transmit off 
+		digitalWrite(RE, HIGH); //Turn recieve off //DEBUG!
+		digitalWrite(DE, LOW); //Turn transmit off  //DEBUG!
 		//Once RS485 is turned off, turn off main external power
 		digitalWrite(Vout_Ctrl, LOW);  //Turn external power off
 		delay(100);  //Wait a jiffy (1/60 second)
 		//Startup in inverse sequence to prevent inappropriate power flow
+		digitalWrite(RE, LOW); //Turn on recieve  //DEBUG!
+		digitalWrite(DE, HIGH); //Turn on transmit  //DEBUG!
 		digitalWrite(Vout_Ctrl, HIGH);  //Turn on external power
-		digitalWrite(RE, LOW); //Turn on recieve
-		digitalWrite(DE, HIGH); //Turn on transmit
-		// while(Serial.read() != 'r') { //Wait until recived conformation of reset  //FIX add timeout!
+		delay(100);
+		while(Serial.read() != 'r') { //Wait until recived conformation of reset  //FIX add timeout!
 			Serial.print("!"); //Print escape character
-		// }
+			Serial.print("!"); //Print escape character //DEBUG!
+		}
     Ctrl = Ctrl & 0x7F; //Automatically clear reset bit after reset has been completed 
 	}
 	delay(1);
