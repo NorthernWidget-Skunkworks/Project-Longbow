@@ -1,18 +1,17 @@
-"Qty";"Value";"Device";"Package";"Parts";"Description";"DESIGNER";"DIGIKEY";"MF";"MOUSER";"MPN";"OC_FARNELL";"OC_NEWARK";"PROJECT";"REV";"VALUE";"VALUE_PART";
-"1";"";"FRAME_A_L";"CREATIVE_COMMONS";"FRAME1";"FRAME A Size , 8 1/2 x 11 INCH, Landscape";"Bobby Schulz";"";"";"";"";"";"";"Longbow";"v0.1";"";"";
-"2";"";"TVSSM712";"SOT23-3";"D1, D2";"Generic dual channel TVS diode";"";"CDSOT23-SM712CT-ND";"Bourns";"";"CDSOT23-SM712";"";"";"";"";"";"";
-"3";"0.1uF";"C-EU0.1UFC0402";"C0402";"C3, C4, C5";"CAPACITOR, European symbol";"";"490-4759-1-ND";"Murata";"";"GCM155R71C104KA55D";"";"";"";"";"";"";
-"2";"100R";"R-EU_100R0402";"R0402";"R1, R2";"RESISTOR, European symbol";"";"311-100LRCT-ND";"Yageo";"";"RC0402FR-07100RL";"";"";"";"";"";"100";
-"4";"10R";"R-EU_R0603";"R0603";"R10, R11, R12, R13";"RESISTOR, European symbol";"";"541-10.0SCT-ND";"Vishay";"";"CRCW060310R0FKEAHP";"";"";"";"";"";"10";
-"5";"10k";"R-EU_10KR0402";"R0402";"R3, R4, R5, R8, R9";"RESISTOR, European symbol";"";"311-10KJRCT-ND";"Yageo";"";"RC0402JR-0710KL";"";"";"";"";"";"10k";
-"2";"1uF";"C-EU1UFC0603";"C0603";"C1, C2";"CAPACITOR, European symbol";"";"490-10479-1-ND";"Murata";"";"GRM188R61C105KA12D";"";"";"";"";"";"";
-"2";"200k";"R-EU_200KR0402";"R0402";"R6, R7";"RESISTOR, European symbol";"";"311-200KLRCT-ND";"Yageo";"";"RC0402FR-07200KL";"";"";"";"";"";"200k";
-"1";"87832-14MALE";"87832-14MALE";"87832-14";"J2";"Milli-Grid Header";"";"WM6815CT-ND";"Molex";"";"0878325623";"";"";"";"";"";"";
-"1";"ATTINY441/841841";"ATTINY441/841841";"SOIC_14";"U$2";"ATTINY441, ATTINY841 8 bit MCU, 4/8k flash, 256/512B SRAM";"";"ATTINY841-SSU-ND";"Atmel";"";"ATTINY841-SSU";"";"";"";"";"";"";
-"2";"CONN_6SCREW_2.54";"CONN_6SCREW_2.54";"1X06_SCREW";"J0, J1";"Genaric 6 pin header";"";"ED10565-ND";"OnShore";"";"OSTVN06A150";"";"";"";"";"";"";
-"1";"DMG3404";"MOSFET-NCH-DMG3404L";"SOT23-3";"Q2";"N-channel MOSFETs";"";"DMG3404L-7DICT-ND";"Diodes Incorporated";"";"DMG3404L-7";"";"";"";"";"DMG3404";"";
-"1";"FDN360P";"MOSFET_PCH-FDN360P";"SOT23-3";"Q6";"P-channel MOSFETs";"";"FDN360PCT-ND";"Fairchild";"";"FDN360P";"";"";"";"";"FDN360P";"";
-"2";"LSF0102DQE";"LSF0102DQE";"DQE_R-PX2SON-N8";"U$3, U$6";"LSF0102 - 2 Channel Bidirectional Voltage Level Translator";"";"296-40399-1-ND";"TI";"";"LSF0102DQER";"";"";"";"";"";"";
-"1";"MIC842H";"MIC842H";"DCK_R-PDSO-G5";"U$11";"Comparator with internal voltage referance (1.24V), 5V and 3.3V compatable, 20mA output current";"";"576-2926-1-ND";"Microchip";"";"MIC842HYC5-TR";"";"";"";"";"";"";
-"1";"SN65HVD30";"SN65HVD30";"SO08";"U$1";"SN65HVD3x - Full Duplex RS-485 Tranciver";"";"296-19625-1-ND";"TI";"";"SN65HVD30DR";"";"";"";"";"";"";
-"1";"TPS7A0533DBV";"TPS7A0533DBV";"SOT23-5";"U1";"TPS7A05* - Ultra Low Power Low Dropout Linear Regulator";"";"";"TI";"595-TPS7A0533PDBVR";"TPS7A0533PDBVR";"";"";"";"";"";"";
+"Qty","Value","Device","Package","Parts","Description","DIGIKEY","MF","MOUSER","MPN","VALUE","VALUE_PART",
+"2","","TVSSM712","SOT23-3","D1, D2","Generic dual channel TVS diode","CDSOT23-SM712CT-ND","Bourns","","CDSOT23-SM712","","",
+"3","0.1uF","C-EU0.1UFC0402","C0402","C3, C4, C5","CAPACITOR, European symbol","490-4759-1-ND","Murata","","GCM155R71C104KA55D","","",
+"2","100R","R-EU_100R0402","R0402","R1, R2","RESISTOR, European symbol","311-100LRCT-ND","Yageo","","RC0402FR-07100RL","","100",
+"4","10R","R-EU_R0603","R0603","R10, R11, R12, R13","RESISTOR, European symbol","541-10.0SCT-ND","Vishay","","CRCW060310R0FKEAHP","","10",
+"5","10k","R-EU_10KR0402","R0402","R3, R4, R5, R8, R9","RESISTOR, European symbol","311-10KJRCT-ND","Yageo","","RC0402JR-0710KL","","10k",
+"2","1uF","C-EU1UFC0603","C0603","C1, C2","CAPACITOR, European symbol","490-10479-1-ND","Murata","","GRM188R61C105KA12D","","",
+"1","ATTINY441/841VQFN","ATTINY441/841VQFN","VQFN-20","U$2","ATtiny841/441 8 bit AVR Microcontroller","ATTINY841-MMHRCT-ND","Atmel","","ATTINY841-MMHR","","",
+"1","AVRISP1.27MM","AVRISP1.27MM","2X3_1.27","ISP1","AVR ISP HEADER","","","","","","",
+"2","CONN_6SCREW_2.54","CONN_6SCREW_2.54","1X06_SCREW","J0, J1","Genaric 6 pin header","ED10565-ND","OnShore","","OSTVN06A150","","",
+"1","DMG3404","MOSFET-NCH-DMG3404L","SOT23-3","Q2","N-channel MOSFETs","DMG3404L-7DICT-ND","Diodes Incorporated","","DMG3404L-7","DMG3404","",
+"2","JUMPER-SMT_2_NO_SILK","JUMPER-SMT_2_NO_SILK","SMT-JUMPER_2_NO_SILK","JP1, JP2","Normally open jumper","","","","","","",
+"1","MIC94090C6","MIC94090C6","SC-70_6","U$1","MIC94090 - Hight Side Load Switch","576-3484-1-ND","Microchip","","MIC94090YC6-TR","","",
+"1","NWLOGO_MED","NWLOGO_MED","NWLOGO_MED","U$4","Medium-sized Northern Widget logo","","","","","","",
+"1","SN65HVD33RHL","SN65HVD33RHL","VQFN-20_POWER","U2","SN65HVD33 - Full Duplex RS-485 Tranciver, with output enable","296-24087-1-ND","TI","","SN65HVD33RHLR","","",
+"1","TPS7A0533DBV","TPS7A0533DBV","SOT23-5","U1","TPS7A05* - Ultra Low Power Low Dropout Linear Regulator","296-TPS7A0533PDBVRCT-ND","TI","595-TPS7A0533PDBVR","TPS7A0533PDBVR","","",
+"2","TXS0102DQM","TXS0102DQM","DQM_R-PX2SON-N8","U$3, U$6","TXS0102 - 2 Channel Bidirectional Voltage Level Translator","296-28435-1-ND","TI","","TXS0102DQMR","","",
