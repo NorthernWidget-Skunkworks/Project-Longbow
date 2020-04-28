@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.2">
+<eagle version="9.4.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -6891,6 +6891,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="149.86" y="170.18" size="1.778" layer="91">Input -&gt; to Micro</text>
 <text x="185.42" y="170.18" size="1.778" layer="91">Output -&gt; to Sensor</text>
 <text x="228.6" y="170.18" size="1.778" layer="91">Program/Widget connection</text>
+<text x="104.14" y="5.08" size="2.54" layer="91" align="center">B</text>
+<text x="104.14" y="33.02" size="2.54" layer="91" align="center">B</text>
+<text x="104.14" y="53.34" size="2.54" layer="91" align="center">A</text>
+<text x="104.14" y="25.4" size="2.54" layer="91" align="center">A</text>
 </plain>
 <instances>
 <instance part="U$2" gate="G$1" x="213.36" y="78.74" smashed="yes"/>
