@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this circuit-board design, please cite it as below."
+authors:
+- family-names: "Schulz"
+  given-names: "Bobby"
+  orcid: "https://orcid.org/0000-0002-9272-4756"
+title: "Project-Longbow"
+abstract: "RS-485 range-extender for long-distance sensor communication."
+version: 0.3.0
+doi: 10.5281/zenodo.3766460
+date-released: 2020-05-01
+url: "https://github.com/NorthernWidget-Skunkworks/Project-Longbow"
+license: CC-BY-SA-4.0
